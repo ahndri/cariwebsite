@@ -91,7 +91,7 @@
             </div>
         </section>
 
-        <!-- Data Grid Table -->
+        <!-- Results Panel (Live Scan) -->
         <section id="results-panel" class="results-panel glass-panel hidden">
             <div class="table-header">
                 <h2>Live Results Log</h2>
@@ -118,6 +118,55 @@
             </div>
             <div class="action-bar-bottom">
                 <button id="reset-btn" class="secondary-btn">Pemindaian Baru</button>
+            </div>
+        </section>
+
+        <!-- Threat Intelligence Visual List (Static Known Bads) -->
+        <section id="threat-intel-panel" class="threat-intel-panel glass-panel">
+            <h2 class="panel-title" style="border-color: rgba(239, 68, 68, 0.4);"><span style="color: #EF4444;">🔴</span> Data Intelijen: Ancaman Imigrasi Aktif</h2>
+            <p class="status-desc" style="margin-bottom: 2rem;">Berikut adalah kompilasi hasil pindaian dari 1.078 kombinasi yang telah terkonfirmasi AKTIF (memiliki identitas IP) dan beroperasi saat ini sebagai situs peniru/phising. Hati-hati!</p>
+            
+            <div class="threat-grid">
+                <!-- Jakarta / Jabar -->
+                <div class="threat-card" style="border-left: 3px solid #EF4444;">
+                    <h4>📍 Jabodetabek & Jabar</h4>
+                    <ul class="threat-list">
+                        <li>imigrasi-jakarta.com <span class="ip-tag">104.21.5.0</span></li>
+                        <li>imigrasijakarta.com <span class="ip-tag">172.67.142.128</span></li>
+                        <li>imigrasijakarta.net <span class="ip-tag">172.67.169.17</span></li>
+                        <li>imigrasibandung.com <span class="ip-tag">209.74.67.88</span></li>
+                        <li>imigrasibandung.net <span class="ip-tag">104.21.89.81</span></li>
+                        <li>imigrasidepok.com <span class="ip-tag">172.67.129.13</span></li>
+                        <li>imigrasibogor.com <span class="ip-tag">104.21.8.182</span></li>
+                    </ul>
+                </div>
+
+                <!-- Jateng / Jatim -->
+                <div class="threat-card" style="border-left: 3px solid #EF4444;">
+                    <h4>📍 Jawa Tengah & Timur</h4>
+                    <ul class="threat-list">
+                        <li>imigrasisurabaya.com <span class="ip-tag">172.67.223.191</span></li>
+                        <li>imigrasisemarang.com <span class="ip-tag">103.28.12.123</span></li>
+                        <li>imigrasijogja.org <span class="ip-tag">172.239.57.117</span></li>
+                        <li>imigrasi-malang.com <span class="ip-tag">172.67.193.74</span></li>
+                    </ul>
+                </div>
+
+                <!-- Bali & Luar Jawa -->
+                <div class="threat-card" style="border-left: 3px solid #EF4444;">
+                    <h4>📍 Bali & Luar Jawa</h4>
+                    <ul class="threat-list">
+                        <li>bali-imigrasi.com <span class="ip-tag">172.67.189.254</span></li>
+                        <li>imigrasibali.com <span class="ip-tag">75.2.103.23</span></li>
+                        <li>imigrasimedan.com <span class="ip-tag">216.120.147.200</span></li>
+                        <li>imigrasipalembang.com <span class="ip-tag">172.67.162.45</span></li>
+                        <li>imigrasibatam.com <span class="ip-tag">172.67.198.134</span></li>
+                        <li>imigrasipekanbaru.com <span class="ip-tag">104.21.90.132</span></li>
+                        <li>imigrasipontianak.com <span class="ip-tag">192.64.119.234</span></li>
+                        <li>samarindaimigrasi.com <span class="ip-tag">104.21.21.166</span></li>
+                        <li>imigrasimakassar.com <span class="ip-tag">198.177.120.125</span></li>
+                    </ul>
+                </div>
             </div>
         </section>
         

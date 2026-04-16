@@ -214,6 +214,57 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
 .error-msg { color: var(--status-danger); font-size: 0.9rem; margin-top: 1rem; opacity: 0; transition: opacity 0.3s; }
 .error-msg.show { opacity: 1; }
 
+/* Threat Intel Panel */
+.threat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.threat-card {
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.threat-card h4 {
+    color: white;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-heading);
+}
+
+.threat-list {
+    list-style: none;
+}
+
+.threat-list li {
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.threat-list li:last-child {
+    border-bottom: none;
+}
+
+.ip-tag {
+    background: rgba(239, 68, 68, 0.15);
+    color: #FCA5A5;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
 .footer { text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 0.9rem; margin-top: auto; }
 
 @media (max-width: 640px) {
