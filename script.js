@@ -146,6 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetList.length > maxLimit) {
             targetList = targetList.slice(0, maxLimit);
         }
+        
+        // Simpan referensi nama domain asli agar dikenali oleh sistem verifikasi
+        targetList.__originalDomain = full;
 
         if (targetList.length === 0) {
             alert('Tidak ada variasi yang dapat di-generate dengan parameter yang dipilih.');
@@ -196,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             completedCount++;
             
             // Update Row and Progress Mode
-            updateRow(rowId, item.domain, item.type, result);
+            updateRow(rowId, item.domain, item.type, result, targetList.__originalDomain);
             updateProgressUI(totalTargets);
             
             // Small delay to prevent complete browser freeze
@@ -246,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultBody.insertBefore(tr, resultBody.firstChild); // prepend
     }
 
-    function updateRow(rowId, domain, type, result) {
+    function updateRow(rowId, domain, type, result, originalDomain = '') {
         const tr = document.getElementById(rowId);
         if(!tr) return;
         
@@ -255,8 +258,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusCol = tr.querySelector('.col-status');
         if (result.isActive) {
             activeCount++;
-            statusCol.innerHTML = `<span class="status-badge badge-danger">Aktif (Bahaya)</span>`;
-            tr.classList.add('row-danger');
+            
+            // FUNGSI VERIFIKASI: Mengecek apakah ini go.id, domain utama, atau subdomain resmi.
+            if (domain.endsWith('.go.id')) {
+                // Jika mengandung nama asli berarti itu kemungkinan subdomain atau domain terkait yang sah
+                if (domain === originalDomain || domain.endsWith('.' + originalDomain)) {
+                    statusCol.innerHTML = `<span class="status-badge badge-safe" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid #10B981;">Subdomain/Akar Resmi</span>`;
+                    tr.style.borderLeft = '3px solid #10B981';
+                } else {
+                    // Ekstensi pemerintah sulit dipalsukan, jadi ini kemungkinan instansi lain (Aman)
+                    statusCol.innerHTML = `<span class="status-badge badge-safe" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">Verified .go.id (Aman)</span>`;
+                    tr.style.borderLeft = '3px solid #10B981';
+                }
+            } else {
+                // Untuk non-pemerintah / go.id, maka itu Bahaya
+                statusCol.innerHTML = `<span class="status-badge badge-danger">Aktif (Bahaya)</span>`;
+                tr.classList.add('row-danger');
+            }
         } else {
             if(result.ip === 'Error') {
                 statusCol.innerHTML = `<span class="status-badge badge-safe">Time out</span>`;
