@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CariWebsite - Deteksi Domain Palsu</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+    <div class="bg-shape bg-shape-3"></div>
+
+    <main class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">Cari<span>Website</span></h1>
+            <p class="subtitle">Deteksi dan analisis situs palsu, phishing, dan scam secara instan.</p>
+        </header>
+
+        <!-- Search Area -->
+        <section class="search-section glass-panel">
+            <div class="input-group">
+                <input type="text" id="url-input" placeholder="Masukkan URL atau Nama Domain (cth: secure-bca.xyz)" autocomplete="off" spellcheck="false">
+                <button id="scan-btn" class="primary-btn">
+                    <span class="btn-text">Analisis</span>
+                    <div class="btn-loader hidden"></div>
+                </button>
+            </div>
+            <div class="error-msg" id="error-msg">Silakan masukkan URL atau domain yang valid.</div>
+        </section>
+
+        <!-- Status Area (Hidden by Default) -->
+        <section id="result-section" class="result-section glass-panel hidden">
+            <!-- Scanning Animation -->
+            <div id="scanning-animation" class="scanning-state">
+                <div class="radar-spinner"></div>
+                <h3 class="scanning-text">Menganalisis Pola <span class="dots">...</span></h3>
+                <p class="scanning-step" id="scan-step-text">Memeriksa struktur URL</p>
+                <!-- Progress bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Result Cards (Hidden while scanning) -->
+            <div id="result-content" class="result-content hidden">
+                <div class="score-card" id="main-score-card">
+                    <div class="score-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="meter" id="score-meter" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="score-text">
+                            <span id="score-value">0</span><span class="percent">%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-details">
+                    <div class="status-badge" id="status-badge">
+                        <span class="icon">🔍</span>
+                        <span id="status-text">Mengevaluasi...</span>
+                    </div>
+                    <div class="domain-info">
+                        <strong>Target:</strong> <span id="target-domain" class="highlight-text">-</span>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <!-- Dynamic factors inject here via JS -->
+                        <div class="info-card" id="tld-factor">
+                            <h4 class="info-title">Ekstensi Domain (TLD)</h4>
+                            <p class="info-desc">-</p>
+                        </div>
+                        <div class="info-card" id="keyword-factor">
+                            <h4 class="info-title">Deteksi Kata Kunci</h4>
+                            <p class="info-desc">-</p>
+                        </div>
+                        <div class="info-card" id="format-factor">
+                            <h4 class="info-title">Struktur URL</h4>
+                            <p class="info-desc">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="reset-btn" class="secondary-btn hidden">Pindai Ulang</button>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features-section" id="features-section">
+            <h2 class="section-title">Mengapa Heuristik?</h2>
+            <div class="features-grid">
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Pola URL</h3>
+                    <p>Mendeteksi struktur anomali seperti karakter berlebih, dashes, atau IP address asli.</p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Keyword Spoofer</h3>
+                    <p>Mengidentifikasi kata sandi penipuan umum seperti 'login', 'update', 'secure', 'verify'.</p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <div class="feature-icon">🌎</div>
+                    <h3>Evaluasi TLD</h3>
+                    <p>Domain gratisan dan murah yang sering digunakan oleh phisher (seperti .xyz, .tk, .pw) akan segera dicurigai.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Aplikasi Anti-Phishing Berbasis Heuristik. Dibuat dengan antarmuka yang modern, diproses penuh di sisi peramban.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
