@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ruleTld = document.getElementById('rule-tld');
     const ruleTypo = document.getElementById('rule-typo');
     const ruleKeyword = document.getElementById('rule-keyword');
+    const ruleRegion = document.getElementById('rule-region');
 
     // Global state
     let isScanning = false;
@@ -51,15 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const PREFIXES = ['login-', 'secure-', 'update-', 'verify-', 'auth-', 'account-', 'my-', 'portal-'];
     const SUFFIXES = ['-login', '-secure', '-update', '-verify', '-support'];
     const VOWELS = ['a', 'e', 'i', 'o', 'u'];
+    // Daftar kota/daerah besar untuk target penipuan
+    const REGIONS = ['jakarta', 'bandung', 'surabaya', 'bali', 'medan', 'makassar', 'semarang', 'jogja', 'yogyakarta', 'palembang', 'batam', 'malang', 'pekanbaru', 'pontianak', 'samarinda', 'tangerang', 'bekasi', 'depok', 'bogor'];
 
     function generatePermutations(baseName, baseTld, options) {
         let results = new Set();
+        
+        // Helper fungsi penambahan variasi
+        const addToResults = (domain, type) => results.add({ domain, type });
         
         // 1. TLD Swap
         if (options.tld) {
             COMMON_TLDS.forEach(tld => {
                 if (tld !== baseTld) {
-                    results.add({ domain: baseName + tld, type: 'TLD Swap' });
+                    addToResults(baseName + tld, 'TLD Swap');
                 }
             });
         }
@@ -69,12 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Character Omission
             for (let i = 0; i < baseName.length; i++) {
                 const omitted = baseName.slice(0, i) + baseName.slice(i + 1);
-                if (omitted.length > 0) results.add({ domain: omitted + baseTld, type: 'Penghilangan Huruf' });
+                if (omitted.length > 0) addToResults(omitted + baseTld, 'Penghilangan Huruf');
             }
             // Character Duplication
             for (let i = 0; i < baseName.length; i++) {
                 const duplicated = baseName.slice(0, i) + baseName[i] + baseName.slice(i);
-                results.add({ domain: duplicated + baseTld, type: 'Huruf Ganda' });
+                addToResults(duplicated + baseTld, 'Huruf Ganda');
             }
             // Vowel Swap
             for (let i = 0; i < baseName.length; i++) {
@@ -82,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     VOWELS.forEach(v => {
                         if (v !== baseName[i].toLowerCase()) {
                             const swapped = baseName.slice(0, i) + v + baseName.slice(i + 1);
-                            results.add({ domain: swapped + baseTld, type: 'Pelesetan Vokal' });
+                            addToResults(swapped + baseTld, 'Pelesetan Vokal');
                         }
                     });
                 }
@@ -92,10 +98,35 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Keyword Insertions
         if (options.keyword) {
             PREFIXES.forEach(pref => {
-                results.add({ domain: pref + baseName + baseTld, type: 'Penambahan Prefix' });
+                addToResults(pref + baseName + baseTld, 'Penambahan Prefix');
             });
             SUFFIXES.forEach(suff => {
-                results.add({ domain: baseName + suff + baseTld, type: 'Penambahan Suffix' });
+                addToResults(baseName + suff + baseTld, 'Penambahan Suffix');
+            });
+        }
+        
+        // 4. Target Nama Daerah (Regional Filtering)
+        // Mengecualikan Subdomain resmi karena jika asli berbunyi jakarta.imigrasi.go.id,
+        // yang dilacak adalah spoofing tld lain misal imigrasi-jakarta.com.
+        if (options.region) {
+            REGIONS.forEach(region => {
+                let generatedTlds = options.tld ? COMMON_TLDS : [baseTld];
+                
+                generatedTlds.forEach(tld => {
+                    // Kasus 1: Strip/Dash dengan wilayah
+                    addToResults(baseName + '-' + region + tld, 'Spoofing Daerah (Dash)');
+                    addToResults(region + '-' + baseName + tld, 'Spoofing Daerah (Dash)');
+                    
+                    // Kasus 2: Sambung Langsung
+                    addToResults(baseName + region + tld, 'Spoofing Daerah (Sambung)');
+                    addToResults(region + baseName + tld, 'Spoofing Daerah (Sambung)');
+                    
+                    // Ekstraksi untuk TLD pemerintah yang mencoba memakai identitas palsu (Sangat jarang, tapi jika ada akan diflag)
+                    if (tld === '.go.id' || baseTld === '.go.id') {
+                        // Jangan scan real subdomain seperti jakarta.imigrasi.go.id karena itu legal
+                        // Jadi biarkan pola dash dan sambung saja di atas yg beresiko.
+                    }
+                });
             });
         }
 
@@ -135,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let targetList = generatePermutations(name, tld, {
             tld: ruleTld.checked,
             typo: ruleTypo.checked,
-            keyword: ruleKeyword.checked
+            keyword: ruleKeyword.checked,
+            region: ruleRegion.checked
         });
         
         // Exclude the original domain if it was accidentally generated
