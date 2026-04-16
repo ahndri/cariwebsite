@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CariWebsite - Deteksi Domain Palsu</title>
-    <!-- Modern Typography -->
+    <title>CariWebsite - Typosquatting Scanner</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,104 +16,110 @@
     <main class="container">
         <!-- Header -->
         <header class="header">
-            <h1 class="logo">Cari<span>Website</span></h1>
-            <p class="subtitle">Deteksi dan analisis situs palsu, phishing, dan scam secara instan.</p>
+            <h1 class="logo">Auto<span>Scanner</span></h1>
+            <p class="subtitle">Generator & Scanner situs typosquatting secara masif dengan Google DoH.</p>
         </header>
 
-        <!-- Search Area -->
-        <section class="search-section glass-panel">
-            <div class="input-group">
-                <input type="text" id="url-input" placeholder="Masukkan URL atau Nama Domain (cth: secure-bca.xyz)" autocomplete="off" spellcheck="false">
-                <button id="scan-btn" class="primary-btn">
-                    <span class="btn-text">Analisis</span>
-                    <div class="btn-loader hidden"></div>
-                </button>
+        <!-- Configuration Panel -->
+        <section class="config-panel glass-panel" id="config-section">
+            <h2 class="panel-title">Parameter Pencarian</h2>
+            
+            <div class="form-group">
+                <label for="domain-input">Target Domain Asli</label>
+                <input type="text" id="domain-input" value="www.imigrasi.go.id" placeholder="Misal: imigrasi.go.id" autocomplete="off" spellcheck="false">
+                <div class="input-hint">Tanpa http:// atau https://</div>
             </div>
-            <div class="error-msg" id="error-msg">Silakan masukkan URL atau domain yang valid.</div>
+
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label for="limit-slider">Batas Maksimal Pengecekan: <span id="limit-val" class="highlight-text">50</span> situs</label>
+                    <input type="range" id="limit-slider" min="10" max="300" step="10" value="50" class="slider">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Filter Variasi (Algoritma Generator)</label>
+                <div class="checkbox-grid">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="rule-tld" checked>
+                        <span class="checkmark"></span>
+                        <span class="chk-label">Ekstensi/TLD Swap (.xyz, .com)</span>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="rule-typo" checked>
+                        <span class="checkmark"></span>
+                        <span class="chk-label">Typosquatting (Salah Ketik)</span>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="rule-keyword">
+                        <span class="checkmark"></span>
+                        <span class="chk-label">Keyword Addition (login-, secure-)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button id="start-btn" class="primary-btn">Mulai Pemindaian Massal</button>
+            </div>
+            <div class="error-msg" id="error-msg">Silakan masukkan nama domain yang valid.</div>
         </section>
 
-        <!-- Status Area (Hidden by Default) -->
-        <section id="result-section" class="result-section glass-panel hidden">
-            <!-- Scanning Animation -->
-            <div id="scanning-animation" class="scanning-state">
-                <div class="radar-spinner"></div>
-                <h3 class="scanning-text">Menganalisis Pola <span class="dots">...</span></h3>
-                <p class="scanning-step" id="scan-step-text">Memeriksa struktur URL</p>
-                <!-- Progress bar -->
+        <!-- Scanning Status Area (Hidden by Default) -->
+        <section id="status-panel" class="status-panel glass-panel hidden">
+            <div class="status-header">
+                <div class="radar-mini"></div>
+                <div>
+                    <h3 class="status-title">Memindai Target <span class="dots">...</span></h3>
+                    <p class="status-desc">Target: <strong id="current-target" class="highlight-text">-</strong></p>
+                </div>
+                <button id="stop-btn" class="danger-btn">Hentikan</button>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-stats">
+                    <span id="progress-text">0 / 0 Selesai</span>
+                    <span id="active-found" class="danger-text">0 Ditemukan Aktif</span>
+                </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
                 </div>
             </div>
+        </section>
 
-            <!-- Result Cards (Hidden while scanning) -->
-            <div id="result-content" class="result-content hidden">
-                <div class="score-card" id="main-score-card">
-                    <div class="score-circle">
-                        <svg viewBox="0 0 100 100">
-                            <circle class="bg" cx="50" cy="50" r="45"></circle>
-                            <circle class="meter" id="score-meter" cx="50" cy="50" r="45"></circle>
-                        </svg>
-                        <div class="score-text">
-                            <span id="score-value">0</span><span class="percent">%</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="result-details">
-                    <div class="status-badge" id="status-badge">
-                        <span class="icon">🔍</span>
-                        <span id="status-text">Mengevaluasi...</span>
-                    </div>
-                    <div class="domain-info">
-                        <strong>Target:</strong> <span id="target-domain" class="highlight-text">-</span>
-                    </div>
-                    
-                    <div class="info-grid">
-                        <!-- Dynamic factors inject here via JS -->
-                        <div class="info-card" id="tld-factor">
-                            <h4 class="info-title">Ekstensi Domain (TLD)</h4>
-                            <p class="info-desc">-</p>
-                        </div>
-                        <div class="info-card" id="keyword-factor">
-                            <h4 class="info-title">Deteksi Kata Kunci</h4>
-                            <p class="info-desc">-</p>
-                        </div>
-                        <div class="info-card" id="format-factor">
-                            <h4 class="info-title">Struktur URL</h4>
-                            <p class="info-desc">-</p>
-                        </div>
-                    </div>
+        <!-- Data Grid Table -->
+        <section id="results-panel" class="results-panel glass-panel hidden">
+            <div class="table-header">
+                <h2>Live Results Log</h2>
+                <div class="badge-legend">
+                    <span class="legen-item"><span class="dot safe-dot"></span> Belum Dibeli</span>
+                    <span class="legen-item"><span class="dot danger-dot"></span> Aktif (Bahaya)</span>
                 </div>
             </div>
-            
-            <button id="reset-btn" class="secondary-btn hidden">Pindai Ulang</button>
+            <div class="table-container">
+                <table id="result-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Variasi Domain</th>
+                            <th>Tipe Manipulasi</th>
+                            <th>Resolusi IP</th>
+                            <th>Status/Risiko</th>
+                        </tr>
+                    </thead>
+                    <tbody id="result-body">
+                        <!-- Rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="action-bar-bottom">
+                <button id="reset-btn" class="secondary-btn">Pemindaian Baru</button>
+            </div>
         </section>
         
-        <!-- Features Section -->
-        <section class="features-section" id="features-section">
-            <h2 class="section-title">Mengapa Heuristik?</h2>
-            <div class="features-grid">
-                <div class="feature-card glass-panel">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Pola URL</h3>
-                    <p>Mendeteksi struktur anomali seperti karakter berlebih, dashes, atau IP address asli.</p>
-                </div>
-                <div class="feature-card glass-panel">
-                    <div class="feature-icon">🔍</div>
-                    <h3>Keyword Spoofer</h3>
-                    <p>Mengidentifikasi kata sandi penipuan umum seperti 'login', 'update', 'secure', 'verify'.</p>
-                </div>
-                <div class="feature-card glass-panel">
-                    <div class="feature-icon">🌎</div>
-                    <h3>Evaluasi TLD</h3>
-                    <p>Domain gratisan dan murah yang sering digunakan oleh phisher (seperti .xyz, .tk, .pw) akan segera dicurigai.</p>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="footer">
-        <p>Aplikasi Anti-Phishing Berbasis Heuristik. Dibuat dengan antarmuka yang modern, diproses penuh di sisi peramban.</p>
+        <p>Typosquatting Engine by CariWebsite. Menggunakan Resolusi DNS Open (via Google DoH).</p>
     </footer>
 
     <script src="script.js"></script>
