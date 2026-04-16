@@ -55,6 +55,64 @@ document.addEventListener('DOMContentLoaded', () => {
     // Daftar kota/daerah besar untuk target penipuan
     const REGIONS = ['jakarta', 'bandung', 'surabaya', 'bali', 'medan', 'makassar', 'semarang', 'jogja', 'yogyakarta', 'palembang', 'batam', 'malang', 'pekanbaru', 'pontianak', 'samarinda', 'tangerang', 'bekasi', 'depok', 'bogor'];
 
+    // DATABASE DITJENIM 2026: Daftar URL Resmi Imigrasi
+    const OFFICIAL_SITES = [
+        "kanwilsumbar.imigrasi.go.id", "sibolga.imigrasi.go.id", "kualalumpur.imigrasi.go.id", "singapura.imigrasi.go.id", 
+        "soekarnohatta.imigrasi.go.id", "palopo.imigrasi.go.id", "kotawaringinbarat.imigrasi.go.id", "rudenimmanado.imigrasi.go.id", 
+        "morowali.imigrasi.go.id", "kulonprogo.imigrasi.go.id", "padangsidimpuan.imigrasi.go.id", "banggai.imigrasi.go.id", 
+        "bagansiapiapi.imigrasi.go.id", "agam.imigrasi.go.id", "tanjunguban.imigrasi.go.id", "pontianak.imigrasi.go.id", 
+        "kanwilbanten.imigrasi.go.id", "ternate.imigrasi.go.id", "kanwilpapuabarat.imigrasi.go.id", "sabang.imigrasi.go.id", 
+        "sampit.imigrasi.go.id", "blora.imigrasi.go.id", "kupang.imigrasi.go.id", "manado.imigrasi.go.id", 
+        "kanwiljabar.imigrasi.go.id", "jambi.imigrasi.go.id", "tarakan.imigrasi.go.id", "kanwilsulteng.imigrasi.go.id", 
+        "tanjungpriok.imigrasi.go.id", "tanjungredeb.imigrasi.go.id", "kanwilkepri.imigrasi.go.id", "berlin.imigrasi.go.id", 
+        "muaraenim.imigrasi.go.id", "surakarta.imigrasi.go.id", "ketapang.imigrasi.go.id", "pohuwato.imigrasi.go.id", 
+        "mandailingnatal.imigrasi.go.id", "kanwilsultra.imigrasi.go.id", "biak.imigrasi.go.id", "tangerang.imigrasi.go.id", 
+        "tanjungpandan.imigrasi.go.id", "klungkung.imigrasi.go.id", "ranai.imigrasi.go.id", "wonosobo.imigrasi.go.id", 
+        "jakartaselatan.imigrasi.go.id", "sambas.imigrasi.go.id", "nunukan.imigrasi.go.id", "mimika.imigrasi.go.id", 
+        "kanwilsumsel.imigrasi.go.id", "kanwilriau.imigrasi.go.id", "samarinda.imigrasi.go.id", "bangkok.imigrasi.go.id", 
+        "mamuju.imigrasi.go.id", "rudenimpekanbaru.imigrasi.go.id", "jember.imigrasi.go.id", "manokwari.imigrasi.go.id", 
+        "jayapura.imigrasi.go.id", "kanwilntt.imigrasi.go.id", "mempawah.imigrasi.go.id", "dili.imigrasi.go.id", 
+        "kanwilsulut.imigrasi.go.id", "tapanuliutara.imigrasi.go.id", "tokyo.imigrasi.go.id", "kanwilkalteng.imigrasi.go.id", 
+        "cilacap.imigrasi.go.id", "tanjungjbalaikarimun.imigrasi.go.id", "pematangsiantar.imigrasi.go.id", "tabanan.imigrasi.go.id", 
+        "baubau.imigrasi.go.id", "banyuwangi.imigrasi.go.id", "lhokseumawe.imigrasi.go.id", "medan.imigrasi.go.id", 
+        "tembilahan.imigrasi.go.id", "pasuruan.imigrasi.go.id", "purworejo.imigrasi.go.id", "pamekasan.imigrasi.go.id", 
+        "cilegon.imigrasi.go.id", "bandarlampung.imigrasi.go.id", "sorong.imigrasi.go.id", "siak.imigrasi.go.id", 
+        "makassar.imigrasi.go.id", "belakangpadang.imigrasi.go.id", "bengkulu.imigrasi.go.id", "tasikmalaya.imigrasi.go.id", 
+        "pemalang.imigrasi.go.id", "guangzhou.imigrasi.go.id", "kalianda.imigrasi.go.id", "batam.imigrasi.go.id", 
+        "rudenimpontianak.imigrasi.go.id", "rudenimbalikpapan.imigrasi.go.id", "tanjungbalaiasahan.imigrasi.go.id", "losangeles.imigrasi.go.id", 
+        "bekasi.imigrasi.go.id", "jakartapusat.imigrasi.go.id", "kanwiljakarta.imigrasi.go.id", "rudenimdenpasar.imigrasi.go.id", 
+        "bungo.imigrasi.go.id", "singaraja.imigrasi.go.id", "kanwilsulbar.imigrasi.go.id", "nias.imigrasi.go.id", 
+        "penang.imigrasi.go.id", "tobelo.imigrasi.go.id", "atambua.imigrasi.go.id", "mataram.imigrasi.go.id", 
+        "kanwilmaluku.imigrasi.go.id", "tegal.imigrasi.go.id", "kanwiljatim.imigrasi.go.id", "ambon.imigrasi.go.id", 
+        "palembang.imigrasi.go.id", "batulicin.imigrasi.go.id", "cirebon.imigrasi.go.id", "kotabumi.imigrasi.go.id", 
+        "labuanbajo.imigrasi.go.id", "bogor.imigrasi.go.id", "bandung.imigrasi.go.id", "lomboktimur.imigrasi.go.id", 
+        "jakartatimur.imigrasi.go.id", "blitar.imigrasi.go.id", "kanwillampung.imigrasi.go.id", "yogyakarta.imigrasi.go.id", 
+        "kanwilbali.imigrasi.go.id", "rudenimsurabaya.imigrasi.go.id", "kendari.imigrasi.go.id", "merauke.imigrasi.go.id", 
+        "rudenimjayapura.imigrasi.go.id", "polonia.imigrasi.go.id", "hongkong.imigrasi.go.id", "kanwilbabel.imigrasi.go.id", 
+        "tanjungpinang.imigrasi.go.id", "balikpapan.imigrasi.go.id", "kanwiljambi.imigrasi.go.id", "rudenimsemarang.imigrasi.go.id", 
+        "kanwilbengkulu.imigrasi.go.id", "garut.imigrasi.go.id", "pati.imigrasi.go.id", "kanwiljateng.imigrasi.go.id", 
+        "serang.imigrasi.go.id", "palangkaraya.imigrasi.go.id", "kanwilkalbar.imigrasi.go.id", "singkawang.imigrasi.go.id", 
+        "denpasar.imigrasi.go.id", "polewalimandar.imigrasi.go.id", "kanwilntb.imigrasi.go.id", "rudenimmedan.imigrasi.go.id", 
+        "taipei.imigrasi.go.id", "madiun.imigrasi.go.id", "bengkalis.imigrasi.go.id", "lubuklinggau.imigrasi.go.id", 
+        "kediri.imigrasi.go.id", "kotamobagu.imigrasi.go.id", "tanjungperak.imigrasi.go.id", "palu.imigrasi.go.id", 
+        "johorbahru.imigrasi.go.id", "parepare.imigrasi.go.id", "beijing.imigrasi.go.id", "takengon.imigrasi.go.id", 
+        "banjarmasin.imigrasi.go.id", "langsa.imigrasi.go.id", "entikong.imigrasi.go.id", "bontang.imigrasi.go.id", 
+        "dumai.imigrasi.go.id", "kanwilmalut.imigrasi.go.id", "kanwilsulsel.imigrasi.go.id", "tual.imigrasi.go.id", 
+        "meulaboh.imigrasi.go.id", "tahuna.imigrasi.go.id", "putussibau.imigrasi.go.id", "rudenimmakassar.imigrasi.go.id", 
+        "kanwilkalsel.imigrasi.go.id", "karawang.imigrasi.go.id", "bantaeng.imigrasi.go.id", "dabosingkep.imigrasi.go.id", 
+        "gorontalo.imigrasi.go.id", "ponorogo.imigrasi.go.id", "surabaya.imigrasi.go.id", "sydney.imigrasi.go.id", 
+        "jeddah.imigrasi.go.id", "bitung.imigrasi.go.id", "malang.imigrasi.go.id", "tarempa.imigrasi.go.id", 
+        "rudenimtanjungpinang.imigrasi.go.id", "kanwilgorontalo.imigrasi.go.id", "bima.imigrasi.go.id", "padang.imigrasi.go.id", 
+        "belawan.imigrasi.go.id", "sanggau.imigrasi.go.id", "jakartabarat.imigrasi.go.id", "kanwilpapua.imigrasi.go.id", 
+        "rudenimkupang.imigrasi.go.id", "rudenimjakarta.imigrasi.go.id", "maumere.imigrasi.go.id", "bandaaceh.imigrasi.go.id", 
+        "davao.imigrasi.go.id", "jakartautara.imigrasi.go.id", "denhaag.imigrasi.go.id", "tawau.imigrasi.go.id", 
+        "kualatungkal.imigrasi.go.id", "pekanbaru.imigrasi.go.id", "kanwilkaltim.imigrasi.go.id", "sumbawabesar.imigrasi.go.id", 
+        "bengkuluutara.imigrasi.go.id", "kanwilsumut.imigrasi.go.id", "bone.imigrasi.go.id", "semarang.imigrasi.go.id", 
+        "ngurahrai.imigrasi.go.id", "cianjur.imigrasi.go.id", "kuching.imigrasi.go.id", "songkhla.imigrasi.go.id", 
+        "kerinci.imigrasi.go.id", "pangkalpinang.imigrasi.go.id", "kanwilyogyakarta.imigrasi.go.id", "sukabumi.imigrasi.go.id", 
+        "kinabalu.imigrasi.go.id", "selatpanjang.imigrasi.go.id", "imigrasi.go.id"
+    ];
+
     function generatePermutations(baseName, baseTld, options) {
         let results = new Set();
         
@@ -291,17 +349,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (result.isActive) {
             activeCount++;
             
-            // FUNGSI VERIFIKASI: Mengecek apakah ini go.id, domain utama, atau subdomain resmi.
-            if (domain.endsWith('.go.id')) {
-                // Jika mengandung nama asli berarti itu kemungkinan subdomain atau domain terkait yang sah
-                if (domain === originalDomain || domain.endsWith('.' + originalDomain)) {
-                    statusCol.innerHTML = `<span class="status-badge badge-safe" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid #10B981;">Subdomain/Akar Resmi</span>`;
-                    tr.style.borderLeft = '3px solid #10B981';
-                } else {
-                    // Ekstensi pemerintah sulit dipalsukan, jadi ini kemungkinan instansi lain (Aman)
-                    statusCol.innerHTML = `<span class="status-badge badge-safe" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">Verified .go.id (Aman)</span>`;
-                    tr.style.borderLeft = '3px solid #10B981';
-                }
+            // FUNGSI VERIFIKASI: Mengecek apakah terdaftar di OFFICIAL_SITES (Database Ditjenim)
+            if (OFFICIAL_SITES.includes(domain)) {
+                statusCol.innerHTML = `<span class="status-badge badge-safe" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid #10B981;">Resmi DITJENIM (Aman)</span>`;
+                tr.style.borderLeft = '3px solid #10B981';
+            } else if (domain.endsWith('.go.id')) {
+                // Instansi pemerintah lain selain Ditjenim (Pasti Aman)
+                statusCol.innerHTML = `<span class="status-badge badge-safe" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">Instansi Lain .go.id (Aman)</span>`;
+                tr.style.borderLeft = '3px solid #10B981';
             } else {
                 // Untuk non-pemerintah / go.id, maka itu Bahaya
                 statusCol.innerHTML = `<span class="status-badge badge-danger">Aktif (Bahaya)</span>`;
